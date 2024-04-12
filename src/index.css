@@ -222,7 +222,7 @@ form > input::placeholder {
   border-radius: 5px;
   background-color: #473a2b;
   color: #fff;
-  font-size: 15px;
+  font: revert;
   cursor: pointer;
   display: flex;
   justify-content: center;

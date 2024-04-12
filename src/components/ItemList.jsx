@@ -1,19 +1,19 @@
-export default function ItemList() {
+export default function ItemList({ items }) {
   return (
     <ul>
-      <Item text="good mood" />
-      <Item text="good mood" />
-      <Item text="good mood" />
+      {items.map((item) => {
+        return <Item key={item.id} item={item} />;
+      })}
     </ul>
   );
 }
 
-function Item() {
+function Item({ item }) {
   return (
     <li className="item">
       <label>
-        <input type="checkbox" />
-        good mood
+        <input checked={item.packed} type="checkbox" />
+        {item.name}
       </label>
       <button>❌</button>
     </li>

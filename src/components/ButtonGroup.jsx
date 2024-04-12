@@ -7,6 +7,7 @@ export default function ButtonGroup() {
     "Reset to initial",
     "Remove all items",
   ];
+
   return (
     <section className="button-group">
       {secondaryButtons.map((text) => {
