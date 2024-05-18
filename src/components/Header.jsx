@@ -1,10 +1,13 @@
 import Counter from "./Counter";
 
-export default function Header() {
+export default function Header({ totalNumberOfItems, numberOfItemsPacked }) {
   return (
     <header>
       <p></p>
-      <Counter />
+      <Counter
+        numberOfItemsPacked={numberOfItemsPacked}
+        totalNumberOfItems={totalNumberOfItems}
+      />
     </header>
   );
 }
