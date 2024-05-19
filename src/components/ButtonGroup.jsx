@@ -1,6 +1,6 @@
 import Button from "./Button";
-import { ItemsContext } from "../contexts/itemsContextProvider";
-import { useContext } from "react";
+
+import { useItemsContext } from "../lib/hooks";
 
 export default function ButtonGroup() {
   const {
@@ -8,7 +8,7 @@ export default function ButtonGroup() {
     handleRemoveAllItems,
     handleMarkAllAsInComplete,
     handleMarkAllAsComplete,
-  } = useContext(ItemsContext);
+  } = useItemsContext();
 
   const secondaryButtons = [
     {

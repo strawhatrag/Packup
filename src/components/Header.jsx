@@ -1,9 +1,8 @@
-import { useContext } from "react";
+import { useItemsContext } from "../lib/hooks";
 import Counter from "./Counter";
-import { ItemsContext } from "../contexts/itemsContextProvider";
 
 export default function Header() {
-  const { items } = useContext(ItemsContext);
+  const { items } = useItemsContext();
   return (
     <header>
       <p></p>

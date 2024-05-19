@@ -1,44 +1,30 @@
 import EmptyView from "./EmptyView";
 import Select from "react-select";
-import { useContext, useState } from "react";
-import { useMemo } from "react";
-import { ItemsContext } from "../contexts/itemsContextProvider";
+import { useMemo, useState } from "react";
+import { useItemsContext } from "../lib/hooks";
 
 const sortingOptions = [
-  {
-    label: "Sort by Default",
-    value: "default",
-  },
-  {
-    label: "Sort by Packed",
-    value: "packed",
-  },
-  {
-    label: "Sort by Unpacked",
-    value: "unpacked",
-  },
+  { label: "Sort by Default", value: "default" },
+  { label: "Sort by Packed", value: "packed" },
+  { label: "Sort by Unpacked", value: "unpacked" },
 ];
 
 export default function ItemList() {
-  //using context
-  const { items, handleDeleteItem, handleToggleItem } =
-    useContext(ItemsContext);
-
+  // Using context
+  const { items, handleDeleteItem, handleToggleItem } = useItemsContext();
   const [sortBy, setSortBy] = useState("default");
 
-  const sortedItems = useMemo(
-    () =>
-      [...items].sort((a, b) => {
-        if (sortBy === "packed") {
-          return b.packed - a.packed;
-        } else if (sortBy === "unpacked") {
-          return a.packed - b.packed;
-        } else {
-          return 0; // Explicitly return 0 to keep the original order if sortBy is "default"
-        }
-      }),
-    [items, sortBy]
-  );
+  const sortedItems = useMemo(() => {
+    return [...items].sort((a, b) => {
+      if (sortBy === "packed") {
+        return b.packed - a.packed;
+      } else if (sortBy === "unpacked") {
+        return a.packed - b.packed;
+      } else {
+        return 0; // Keep original order if sortBy is "default"
+      }
+    });
+  }, [items, sortBy]);
 
   return (
     <ul className="item-list">
@@ -46,7 +32,11 @@ export default function ItemList() {
 
       {items.length > 0 && (
         <section className="sorting">
-          <Select />
+          <Select
+            options={sortingOptions}
+            value={sortingOptions.find((option) => option.value === sortBy)}
+            onChange={(option) => setSortBy(option.value)}
+          />
         </section>
       )}
 
@@ -67,9 +57,9 @@ function Item({ item, onDeleteItem, onToggleItem }) {
     <li className="item">
       <label>
         <input
-          onChange={() => onToggleItem(item.id)}
-          checked={item.packed}
           type="checkbox"
+          checked={item.packed}
+          onChange={() => onToggleItem(item.id)}
         />
         {item.name}
       </label>
