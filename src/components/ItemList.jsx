@@ -1,6 +1,8 @@
 import EmptyView from "./EmptyView";
 import Select from "react-select";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { useMemo } from "react";
+import { ItemsContext } from "../contexts/itemsContextProvider";
 
 const sortingOptions = [
   {
@@ -17,22 +19,26 @@ const sortingOptions = [
   },
 ];
 
-export default function ItemList({
-  items,
-  handleDeleteItem,
-  handleToggleItem,
-}) {
+export default function ItemList() {
+  //using context
+  const { items, handleDeleteItem, handleToggleItem } =
+    useContext(ItemsContext);
+
   const [sortBy, setSortBy] = useState("default");
 
-  const sortedItems = [...items].sort((a, b) => {
-    if (sortBy === "packed") {
-      return b.packed - a.packed;
-    } else if (sortBy === "unpacked") {
-      return a.packed - b.packed;
-    } else {
-      return 0; // Explicitly return 0 to keep the original order if sortBy is "default"
-    }
-  });
+  const sortedItems = useMemo(
+    () =>
+      [...items].sort((a, b) => {
+        if (sortBy === "packed") {
+          return b.packed - a.packed;
+        } else if (sortBy === "unpacked") {
+          return a.packed - b.packed;
+        } else {
+          return 0; // Explicitly return 0 to keep the original order if sortBy is "default"
+        }
+      }),
+    [items, sortBy]
+  );
 
   return (
     <ul className="item-list">
@@ -40,11 +46,7 @@ export default function ItemList({
 
       {items.length > 0 && (
         <section className="sorting">
-          <Select
-            onChange={(option) => setSortBy(option.value)}
-            defaultValue={sortingOptions[0]}
-            options={sortingOptions}
-          />
+          <Select />
         </section>
       )}
 
