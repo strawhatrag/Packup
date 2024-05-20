@@ -10,7 +10,7 @@ Packup is a user-friendly application designed to help you manage and organize y
 - Remove all items with a single click.
 
 ## Demo
-[LINK](https://packup-qchh0afsn-strawhatrags-projects.vercel.app/)
+[LINK](https://packup.vercel.app/)
 
 ## Installation
 Follow these steps to set up the project locally:
