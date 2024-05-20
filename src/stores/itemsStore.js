@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 const initialItems = [
   {
@@ -18,45 +19,50 @@ const initialItems = [
   },
 ];
 
-const useItemsStore = create((set) => ({
-  items: initialItems,
+const useItemsStore = create(
+  persist(
+    (set) => ({
+      items: initialItems,
 
-  removeAllItems: () => set(() => ({ items: [] })),
+      removeAllItems: () => set(() => ({ items: [] })),
 
-  resetToInitial: () => set(() => ({ items: initialItems })),
+      resetToInitial: () => set(() => ({ items: initialItems })),
 
-  addItem: (newItemText) =>
-    set((state) => {
-      const newItem = {
-        id: new Date().getTime(),
-        name: newItemText,
-        packed: false,
-      };
-      return { items: [...state.items, newItem] };
+      addItem: (newItemText) =>
+        set((state) => {
+          const newItem = {
+            id: new Date().getTime(),
+            name: newItemText,
+            packed: false,
+          };
+          return { items: [...state.items, newItem] };
+        }),
+
+      markAllAsComplete: () =>
+        set((state) => ({
+          items: state.items.map((item) => ({ ...item, packed: true })),
+        })),
+
+      markAllAsIncomplete: () =>
+        set((state) => ({
+          items: state.items.map((item) => ({ ...item, packed: false })),
+        })),
+      deleteItem: (id) =>
+        set((state) => ({
+          items: state.items.filter((item) => item.id !== id),
+        })),
+      toggleItem: (id) =>
+        set((state) => ({
+          items: state.items.map((item) => {
+            if (item.id === id) {
+              return { ...item, packed: !item.packed };
+            }
+            return item;
+          }),
+        })),
     }),
-
-  markAllAsComplete: () =>
-    set((state) => ({
-      items: state.items.map((item) => ({ ...item, packed: true })),
-    })),
-
-  markAllAsIncomplete: () =>
-    set((state) => ({
-      items: state.items.map((item) => ({ ...item, packed: false })),
-    })),
-  deleteItem: (id) =>
-    set((state) => ({
-      items: state.items.filter((item) => item.id !== id),
-    })),
-  toggleItem: (id) =>
-    set((state) => ({
-      items: state.items.map((item) => {
-        if (item.id === id) {
-          return { ...item, packed: !item.packed };
-        }
-        return item;
-      }),
-    })),
-}));
+    { name: "items" }
+  )
+);
 
 export default useItemsStore;
